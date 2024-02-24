@@ -96,7 +96,7 @@ function displayMatchesByRound() {
         matchesHTML += `<h2>Jornada ${roundIndex + 1}:</h2>`;
 
         roundMatches.forEach((match, matchIndex) => {
-            matchesHTML += `<p>Partido ${matchIndex + 1}: ${match.home.name} vs ${match.away.name} - Resultado:
+            matchesHTML += `<p>Partido ${matchIndex + 1}:
                             ${match.home.name} <input type="number" id="match${match.home.name}-${match.away.name}-home" min="0"> -
                             ${match.away.name} <input type="number" id="match${match.home.name}-${match.away.name}-away" min="0"></p>`;
         });

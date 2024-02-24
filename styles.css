@@ -14,6 +14,11 @@ input[type="text"] {
     margin-right: 10px;
 }
 
+input[type="number"]{
+    width: 50px; /* Ajustar el ancho de las casillas de número */
+    padding: 3px; /* Ajustar el relleno de las casillas de número */
+}
+
 button {
     padding: 5px 10px;
     background-color: #ead967;
@@ -36,10 +41,15 @@ th, td {
     text-align: left;
 }
 
+.match-result {
+    display: inline-block;
+    margin-left: 10px; /* Ajustar el margen izquierdo */
+}
+
 @media only screen and (max-width: 600px) {
-    input[type="text"] {
-        width: 50%; /* Hacer que el input ocupe todo el ancho disponible */
-        max-width: none; /* Eliminar el ancho máximo del input */
+    input[type="number"] {
+        width: 10%; 
+        padding: 2px;
     }
 
     button {
