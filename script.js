@@ -1,82 +1,108 @@
 let players = [];
 let matches = [];
-let currentRound = 0;
+let currentRound = 1;
 
 function addPlayer() {
     const playerName = document.getElementById("playerName").value;
     if (playerName.trim() !== "") {
         players.push({ name: playerName, points: 0 });
-        document.getElementById("playersList").innerHTML += `<p>${playerName}</p>`;
-        document.getElementById("playerName").value = "";
+        updateStandings();
     }
-}
-
-function generateMatches() {
-    matches = [];
-    for (let i = 0; i < players.length; i++) {
-        for (let j = i + 1; j < players.length; j++) {
-            matches.push({ home: players[i], away: players[j], homeScore: 0, awayScore: 0 });
-        }
-    }
-}
-
-function playRound() {
-    generateMatches();
-    let roundHTML = "<h2>Jornada Actual:</h2>";
-    matches.forEach((match, index) => {
-        roundHTML += `<p>Partido ${index + 1}: ${match.home.name} vs ${match.away.name} - Resultado: 
-                      ${match.home.name} <input type="number" id="match${index}-home" min="0"> -
-                      ${match.away.name} <input type="number" id="match${index}-away" min="0"></p>`;
-    });
-    roundHTML += "<button onclick='updateResults()'>Actualizar Resultados</button>";
-    document.getElementById("results").innerHTML = roundHTML;
-}
-
-function updateResults() {
-    matches.forEach((match, index) => {
-        const homeScore = parseInt(document.getElementById(`match${index}-home`).value);
-        const awayScore = parseInt(document.getElementById(`match${index}-away`).value);
-        
-        if (homeScore >= 0 && awayScore >= 0) {
-            match.homeScore = homeScore;
-            match.awayScore = awayScore;
-            match.home.points += homeScore;
-            match.away.points += awayScore;
-        }
-    });
-    
-    updateStandings();
 }
 
 function updateStandings() {
     players.sort((a, b) => b.points - a.points);
-    
-    let standingsHTML = "<h2>Tabla de Posiciones:</hjson>";
+
+    const standingsTable = document.getElementById("standings");
+    standingsTable.innerHTML = `
+        <tr>
+            <th>Posición</th>
+            <th>Jugador</th>
+            <th>Puntos</th>
+        </tr>
+    `;
+
     players.forEach((player, index) => {
-        standingsHTML += `<p>${index + 1}. ${player.name} - Puntos: ${player.points}</p>`;
+        const row = standingsTable.insertRow(-1);
+        row.insertCell(0).textContent = index + 1;
+        row.insertCell(1).textContent = player.name;
+        row.insertCell(2).textContent = player.points;
     });
-    
-    document.getElementById("playersList").innerHTML = standingsHTML;
 }
 
-function navigateRound(direction) {
-    currentRound += direction;
-    
-    if (currentRound <= 0) {
-        document.getElementById("prevRound").style.display = "none";
-    } else {
-        document.getElementById("prevRound").style.display = "block";
-    }
-    
-    if (currentRound >= matches.length) {
-        document.getElementById("nextRound").style.display = "none";
-    } else {
-        document.getElementById("nextRound").style.display = "block";
-    }
-    
-    playRound(currentRound);
+function playTournament() {
+    generateMatches();
+    displayMatchesByRound();
 }
 
-function startTournament() {
-    playRound();
+function generateMatches() {
+    matches = [];
+
+    let numPlayers = players.length;
+
+    if (numPlayers % 2 !== 0) {
+        alert("El número de jugadores debe ser par para formar los enfrentamientos correctamente.");
+        return;
+    }
+
+    let playerIndices = [...Array(numPlayers).keys()]; // Array de índices de jugadores
+
+    for (let round = 1; round < numPlayers; round++) {
+        let roundMatches = [];
+
+        for (let i = 0; i < numPlayers / 2; i++) {
+            let homeIndex = playerIndices[i];
+            let awayIndex = playerIndices[numPlayers - 1 - i];
+
+            roundMatches.push({ home: players[homeIndex], away: players[awayIndex], homeScore: 0, awayScore: 0 });
+        }
+
+        // Rotar los índices de los jugadores para la siguiente ronda
+        playerIndices.splice(1, 0, playerIndices.pop());
+
+        matches.push(roundMatches);
+    }
+}
+
+function updateResults() {
+    players.forEach(player => player.points = 0); // Reiniciar los puntos de todos los jugadores antes de recalcularlos
+
+    matches.forEach(roundMatches => {
+        roundMatches.forEach(match => {
+            const homeScore = parseInt(document.getElementById(`match${match.home.name}-${match.away.name}-home`).value);
+            const awayScore = parseInt(document.getElementById(`match${match.home.name}-${match.away.name}-away`).value);
+
+            if (!isNaN(homeScore) && !isNaN(awayScore)) {
+                match.homeScore = homeScore;
+                match.awayScore = awayScore;
+                match.home.points += homeScore;
+                match.away.points += awayScore;
+            }
+        });
+    });
+
+    updateStandings(); // Actualizar la tabla de posiciones después de cada partido
+}
+
+function displayMatchesByRound() {
+    let matchesHTML = "";
+
+    matches.forEach((roundMatches, roundIndex) => {
+        matchesHTML += `<h2>Jornada ${roundIndex + 1}:</h2>`;
+
+        roundMatches.forEach((match, matchIndex) => {
+            matchesHTML += `<p>Partido ${matchIndex + 1}: ${match.home.name} vs ${match.away.name} - Resultado:
+                            ${match.home.name} <input type="number" id="match${match.home.name}-${match.away.name}-home" min="0"> -
+                            ${match.away.name} <input type="number" id="match${match.home.name}-${match.away.name}-away" min="0"></p>`;
+        });
+    });
+
+    document.getElementById("results").innerHTML = matchesHTML;
+
+    matches.forEach((roundMatches, roundIndex) => {
+        roundMatches.forEach((match, matchIndex) => {
+            document.getElementById(`match${match.home.name}-${match.away.name}-home`).addEventListener('input', updateResults);
+            document.getElementById(`match${match.home.name}-${match.away.name}-away`).addEventListener('input', updateResults);
+        });
+    });
 }

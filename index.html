@@ -2,19 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneo Americano</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Torneo Americano</h1>
-    <div id="input-section">
-        <input type="text" id="playerName" placeholder="Ingresa el nombre del jugador">
-        <button onclick="addPlayer()">Agregar Jugador</button>
-    </div>
-    <button onclick="startTournament()">Iniciar Torneo</button>
-    <div id="playersList"></div>
+
+    <h2>Jugadores:</h2>
+    <input type="text" id="playerName" placeholder="Nombre del jugador">
+    <button onclick="addPlayer()">Agregar Jugador</button>
+
+    <h2>Tabla de Posiciones:</h2>
+    <table id="standings">
+        <tr>
+            <th>Posición</th>
+            <th>Jugador</th>
+            <th>Puntos</th>
+        </tr>
+    </table>
+
+    <h2>Ingrese los resultados de los partidos:</h2>
     <div id="results"></div>
+
+    <button onclick="playTournament()">Iniciar Torneo</button>
+
     <script src="script.js"></script>
 </body>
 </html>
