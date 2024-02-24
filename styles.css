@@ -53,7 +53,7 @@ th, td {
     }
 
     button {
-        width: 100%; /* Hacer que el botón ocupe todo el ancho disponible */
+        width: 50%; /* Hacer que el botón ocupe todo el ancho disponible */
         margin: 10px 0; /* Ajustar el margen del botón */
     }
 }
