@@ -16,6 +16,9 @@ input[type="text"] {
 
 button {
     padding: 5px 10px;
+    background-color: #ead967;
+    font-weight: bold;
+    border-radius: 10px;
 }
 
 table {
@@ -35,7 +38,7 @@ th, td {
 
 @media only screen and (max-width: 600px) {
     input[type="text"] {
-        width: 100%; /* Hacer que el input ocupe todo el ancho disponible */
+        width: 50%; /* Hacer que el input ocupe todo el ancho disponible */
         max-width: none; /* Eliminar el ancho máximo del input */
     }
 

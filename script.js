@@ -1,6 +1,7 @@
 let players = [];
 let matches = [];
 let currentRound = 1;
+let tournamentStarted = false;
 
 function addPlayer() {
     const playerName = document.getElementById("playerName").value;
@@ -33,6 +34,10 @@ function updateStandings() {
 function playTournament() {
     generateMatches();
     displayMatchesByRound();
+    document.getElementById("playerName").style.display = "none";
+    document.getElementById("playerName").previousElementSibling.style.display = "none"; // Ocultar el texto "Jugadores:"
+    document.querySelector("button").style.display = "none"; // Ocultar el botón "Agregar Jugador"
+    document.querySelectorAll("button")[1].style.display = "none"; // Ocultar el botón "Iniciar Torneo"
 }
 
 function generateMatches() {
