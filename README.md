@@ -1,1 +1,2 @@
-# americano
+<h1>Torneo Americano</h1>
+Esta pagina construida en css, html y javascript se usa para poder organizar un torneo americano. En este tipo de torneo todos juegan contra todos gana quien acumule mas puntos
